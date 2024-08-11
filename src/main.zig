@@ -7,12 +7,12 @@ const FLAGS: u32 = ALIGN | MEMINFO;
 const MultibootHeader = extern struct {
     magic: u32 = MB1_MAGIC,
     flags: u32,
-    checksum: u32,
+    checksum: i64,
 };
 
 export var multiboot align(4) linksection(".multiboot") = MultibootHeader{
     .flags = FLAGS,
-    .checksum = @as(u32, @intCast(((-(@as(i64, @intCast(MB1_MAGIC)) + @as(i64, @intCast(FLAGS)))) & 0xFFFFFFFF))),
+    .checksum = -(@as(i64, (MB1_MAGIC + (FLAGS & 0xFFFFFFFF)))),
 };
 
 export fn _start() noreturn {
@@ -28,5 +28,7 @@ pub fn main() void {
     console.putString("Hello, world");
     console.setForegroundColor(.LightRed);
     console.putChar('!');
+    console.setLocation(2, 2);
     console.terminalSetCursor(0, 1);
+    console.putString("Something went wrong ");
 }
