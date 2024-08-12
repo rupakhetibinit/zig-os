@@ -12,7 +12,7 @@ const MultibootHeader = extern struct {
 
 export var multiboot align(4) linksection(".multiboot") = MultibootHeader{
     .flags = FLAGS,
-    .checksum = -(@as(i64, (MB1_MAGIC + (FLAGS & 0xFFFFFFFF)))),
+    .checksum = -@as(i64, (MB1_MAGIC + (FLAGS & 0xFFFFFFFF))),
 };
 
 export fn _start() noreturn {
@@ -28,6 +28,7 @@ pub fn main() void {
     console.putString("Hello, world");
     console.setForegroundColor(.LightRed);
     console.putChar('!');
+    console.putChar('2');
     console.setLocation(2, 2);
     console.terminalSetCursor(0, 1);
     console.putString("Something went wrong ");
